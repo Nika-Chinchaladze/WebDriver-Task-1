@@ -18,4 +18,4 @@ class OptionalPasteComponent extends BaseComponent {
     }
 }
 
-module.exports = new OptionalPasteComponent;
+module.exports = OptionalPasteComponent;

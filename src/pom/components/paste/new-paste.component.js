@@ -10,4 +10,4 @@ class NewPasteComponent extends BaseComponent {
     }
 }
 
-module.exports = new NewPasteComponent;
+module.exports = NewPasteComponent;

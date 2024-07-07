@@ -1,25 +1,23 @@
-const { expect, browser } = require('@wdio/globals');
+const { expect } = require('@wdio/globals');
 
-const BasePage = require("../pom/pages/base.page");
-const NewPasteComponent = require("../pom/components/paste/new-paste.component");
-const OptionalPasteComponent = require("../pom/components/paste/optional-paste.component");
+const { page } = require("../pom/index");
 
 describe("Test PasteBin page", () => {
     beforeEach(async () => {
-        await BasePage.open();
+        await page("base").open();
     });
 
     it("Create 'New Paste' with the following attributes.", async () => {
         // Act
-        await NewPasteComponent.postFormText.setValue("Hello from WebDriver");
-        await OptionalPasteComponent.pasteExpiration.click();
-        await OptionalPasteComponent.choosePasteExpiration.click();
-        await OptionalPasteComponent.postFormName.setValue("helloweb");
+        await page("new").postFormText.setValue("Hello from WebDriver");
+        await page("optional").pasteExpiration.click();
+        await page("optional").choosePasteExpiration.click();
+        await page("optional").postFormName.setValue("helloweb");
 
         // Assert
-        const postFormText = await NewPasteComponent.postFormText.getValue();
-        const dropDownList = await OptionalPasteComponent.pasteExpiration.getValue();
-        const postFormName = await OptionalPasteComponent.postFormName.getValue();
+        const postFormText = await page("new").postFormText.getValue();
+        const dropDownList = await page("optional").pasteExpiration.getValue();
+        const postFormName = await page("optional").postFormName.getValue();
 
         expect(postFormText).toHaveText("Hello from WebDriver");
         expect(dropDownList).toHaveText("10 Minutes");
@@ -27,4 +25,3 @@ describe("Test PasteBin page", () => {
 
     });
 });
-
