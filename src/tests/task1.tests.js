@@ -1,36 +1,30 @@
 const { expect, browser } = require('@wdio/globals');
 
+const BasePage = require("../pom/pages/base.page");
+const NewPasteComponent = require("../pom/components/paste/new-paste.component");
+const OptionalPasteComponent = require("../pom/components/paste/optional-paste.component");
+
 describe("Test PasteBin page", () => {
     beforeEach(async () => {
-        await browser.maximizeWindow();
-        await browser.url("/");
+        await BasePage.open();
     });
 
     it("Create 'New Paste' with the following attributes.", async () => {
-        // Variables
-        const postFormTextValue = "Hello from WebDriver";
-        const dropDownValue = "10 Minutes";
-        const postFormNameValue = "helloweb";
+        // Act
+        await NewPasteComponent.postFormText.setValue("Hello from WebDriver");
+        await OptionalPasteComponent.pasteExpiration.click();
+        await OptionalPasteComponent.choosePasteExpiration.click();
+        await OptionalPasteComponent.postFormName.setValue("helloweb");
 
-        // ============= Execution ============= //
-        // Code
-        await $("#postform-text").setValue(postFormTextValue);
-        // Paste Expiration
-        await $("#select2-postform-expiration-container").click();
-        await $(`//li[text()="${dropDownValue}"]`).click();
-        // Paste Name / Title
-        await $("#postform-name").setValue(postFormNameValue);
+        // Assert
+        const postFormText = await NewPasteComponent.postFormText.getValue();
+        const dropDownList = await OptionalPasteComponent.pasteExpiration.getValue();
+        const postFormName = await OptionalPasteComponent.postFormName.getValue();
 
-        // ============= Assertion ============= //;
-        const postFormText = await $("#postform-text").getValue();
-        const dropDownList = await $("#select2-postform-expiration-container").getValue();
-        const postFormName = await $("#postform-name").getValue();
+        expect(postFormText).toHaveText("Hello from WebDriver");
+        expect(dropDownList).toHaveText("10 Minutes");
+        expect(postFormName).toHaveText("helloweb");
 
-        expect(postFormText).toHaveText(postFormTextValue);
-        expect(dropDownList).toHaveText(dropDownValue);
-        expect(postFormName).toHaveText(postFormNameValue);
-
-        await browser.pause(2000);
     });
 });
 
